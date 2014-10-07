@@ -1,0 +1,45 @@
+<?xml version="1.0" standalone="no"?>
+
+<graph>
+
+<description>
+Lustre server software.
+</description>
+
+<copyright>
+Copyright (c) 2000 - 2011 The Regents of the University of California.
+All rights reserved. Rocks(r) v6.1.1 www.rocksclusters.org
+</copyright>
+
+<changelog>
+</changelog>
+
+<edge from="server">
+  <to>lustre-manager</to>
+</edge>
+<order head="server">
+  <tail>lustre-manager</tail>
+</order>
+
+<edge from="lustre-mds">
+  <to>lustre-mdsoss-common</to>
+</edge>
+<order head="lustre-mds">
+  <tail>lustre-mdsoss-common</tail>
+</order>
+
+<edge from="lustre-oss">
+  <to>lustre-mdsoss-common</to>
+</edge>
+<order head="lustre-oss">
+  <tail>lustre-mdsoss-common</tail>
+</order>
+
+<edge from="lustre-mdsoss-common">
+  <to>client</to>
+</edge>
+<order head="lustre-mdsoss-common">
+  <tail>client</tail>
+</order>
+
+</graph>

@@ -1,0 +1,66 @@
+<?xml version="1.0" standalone="no"?>
+<kickstart>
+
+<description>
+Common Lustre OSS/MDS configuration.
+</description>
+
+<copyright>
+Copyright (c) 2000 - 2011 The Regents of the University of California.
+All rights reserved. Rocks(r) v6.1.1 www.rocksclusters.org
+</copyright>
+
+<changelog>
+</changelog>
+
+<package>kernel</package>
+<package>kernel-firmware</package>
+
+<package>lustre</package>
+<package>lustre-modules</package>
+<package>lustre-osd-ldiskfs</package>
+<package>lustre-osd-zfs</package>
+<package>lustre-iokit</package>
+
+<package>e2fsprogs</package>
+<package>e2fsprogs-libs</package>
+<package>libcom_err</package>
+<package>libss</package>
+
+<package>tar</package>
+
+<post>
+
+<file name="/etc/rc.d/rocksconfig.d/pre-10-prep-lustre-kernel-source" perms="755">
+#!/opt/rocks/bin/python
+import os
+
+if os.uname()[2].find('smp') > 0:
+        smp = 0
+else:
+        smp = 1
+
+kver = os.uname()[2].split('smp')[0]
+
+if smp:
+        kdir = '-'.join([kver,'smp'])
+else:
+        kdir = kver
+
+os.system('rm -f /usr/src/linux-2.6')
+os.system('ln -sf /usr/src/linux-%s /usr/src/linux-2.6' % kdir)
+</file>
+
+<!-- Disable automatic reinstall on unplanned power cycles. -->
+
+<!-- Install lustre.conf in modprobe.conf -->
+<eval>
+/opt/rocks/bin/rocks report host lustre config &hostname;
+</eval>
+
+<!-- Remove RCS directory from modprobe.conf -->
+/bin/rm -rf /etc/modprobe.d/RCS
+
+</post>
+
+</kickstart>
